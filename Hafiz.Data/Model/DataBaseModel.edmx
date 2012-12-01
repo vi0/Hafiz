@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="DataBaseModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2005" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="DataBaseModelTargetContainer">
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DataBaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="DataBaseModelContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Users" EntityType="DataBaseModel.User" />
+          <EntitySet Name="Tasks" EntityType="DataBaseModel.Task" />
+          <EntitySet Name="Streams" EntityType="DataBaseModel.Stream" />
+          <EntitySet Name="Processes" EntityType="DataBaseModel.Process" />
+          <EntitySet Name="Tags" EntityType="DataBaseModel.Tag" />
+          <EntitySet Name="Categories" EntityType="DataBaseModel.Category" />
+          <EntitySet Name="TaskStatusTypes" EntityType="DataBaseModel.TaskStatusType" />
+          <EntitySet Name="UserGroups" EntityType="DataBaseModel.UserGroup" />
+          <AssociationSet Name="CategoryTag" Association="DataBaseModel.CategoryTag">
+            <End Role="Category" EntitySet="Categories" />
+            <End Role="Tag" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="UserUserGroup" Association="DataBaseModel.UserUserGroup">
+            <End Role="User" EntitySet="Users" />
+            <End Role="UserGroup" EntitySet="UserGroups" />
+          </AssociationSet>
+          <AssociationSet Name="UserStream" Association="DataBaseModel.UserStream">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Stream" EntitySet="Streams" />
+          </AssociationSet>
+          <AssociationSet Name="ProcessCreator" Association="DataBaseModel.ProcessCreator">
+            <End Role="Process" EntitySet="Processes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="TaskAssignedUsers" Association="DataBaseModel.TaskAssignedUsers">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="TaskUser" Association="DataBaseModel.TaskUser">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="ProcessUser" Association="DataBaseModel.ProcessUser">
+            <End Role="Process" EntitySet="Processes" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="TaskTags" Association="DataBaseModel.TaskTags">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="Tag" EntitySet="Tags" />
+          </AssociationSet>
+          <AssociationSet Name="ProcessTasks" Association="DataBaseModel.ProcessTasks">
+            <End Role="Process" EntitySet="Processes" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="StreamTasks" Association="DataBaseModel.StreamTasks">
+            <End Role="Stream" EntitySet="Streams" />
+            <End Role="Task" EntitySet="Tasks" />
+          </AssociationSet>
+          <AssociationSet Name="StreamProcesses" Association="DataBaseModel.StreamProcesses">
+            <End Role="Stream" EntitySet="Streams" />
+            <End Role="Process" EntitySet="Processes" />
+          </AssociationSet>
+          <AssociationSet Name="TaskStatus" Association="DataBaseModel.TaskStatus">
+            <End Role="Task" EntitySet="Tasks" />
+            <End Role="TaskStatusType" EntitySet="TaskStatusTypes" />
+          </AssociationSet>
+          <EntitySet Name="Attachments" EntityType="DataBaseModel.Attachment" />
+          <EntitySet Name="Timesheets" EntityType="DataBaseModel.Timesheet" />
+          <EntitySet Name="AttachmentTypes" EntityType="DataBaseModel.AttachmentType" />
+          <AssociationSet Name="AttachmentAttachmentType" Association="DataBaseModel.AttachmentAttachmentType">
+            <End Role="Attachment" EntitySet="Attachments" />
+            <End Role="AttachmentType" EntitySet="AttachmentTypes" />
+          </AssociationSet>
+          <AssociationSet Name="TimesheetsUser" Association="DataBaseModel.TimesheetsUser">
+            <End Role="Timesheet" EntitySet="Timesheets" />
+            <End Role="User" EntitySet="Users" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Username" Nullable="false" MaxLength="512" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="8000" />
+          <Property Type="String" Name="LastLoginDate" Nullable="false" />
+          <NavigationProperty Name="UserGroups" Relationship="DataBaseModel.UserUserGroup" FromRole="User" ToRole="UserGroup" />
+          <NavigationProperty Name="Streams" Relationship="DataBaseModel.UserStream" FromRole="User" ToRole="Stream" />
+          <NavigationProperty Name="CreatedProcesses" Relationship="DataBaseModel.ProcessCreator" FromRole="User" ToRole="Process" />
+          <NavigationProperty Name="Tasks" Relationship="DataBaseModel.TaskAssignedUsers" FromRole="User" ToRole="Task" />
+          <NavigationProperty Name="CreatedTasks" Relationship="DataBaseModel.TaskUser" FromRole="User" ToRole="Task" />
+          <NavigationProperty Name="Processes" Relationship="DataBaseModel.ProcessUser" FromRole="User" ToRole="Process" />
+          <Property Type="String" Name="Email" Nullable="false" />
+          <NavigationProperty Name="Timesheets" Relationship="DataBaseModel.TimesheetsUser" FromRole="User" ToRole="Timesheet" />
+        </EntityType>
+        <EntityType Name="Task">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="String" Name="DueDate" Nullable="true" />
+          <NavigationProperty Name="AssignedTo" Relationship="DataBaseModel.TaskAssignedUsers" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="CreatedBy" Relationship="DataBaseModel.TaskUser" FromRole="Task" ToRole="User" />
+          <NavigationProperty Name="Tags" Relationship="DataBaseModel.TaskTags" FromRole="Task" ToRole="Tag" />
+          <NavigationProperty Name="Process" Relationship="DataBaseModel.ProcessTasks" FromRole="Task" ToRole="Process" />
+          <NavigationProperty Name="Stream" Relationship="DataBaseModel.StreamTasks" FromRole="Task" ToRole="Stream" />
+          <NavigationProperty Name="TaskStatus" Relationship="DataBaseModel.TaskStatus" FromRole="Task" ToRole="TaskStatusType" />
+        </EntityType>
+        <EntityType Name="Stream">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <NavigationProperty Name="AssignedTo" Relationship="DataBaseModel.UserStream" FromRole="Stream" ToRole="User" />
+          <NavigationProperty Name="Tasks" Relationship="DataBaseModel.StreamTasks" FromRole="Stream" ToRole="Task" />
+          <NavigationProperty Name="Processes" Relationship="DataBaseModel.StreamProcesses" FromRole="Stream" ToRole="Process" />
+        </EntityType>
+        <EntityType Name="Process">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <Property Type="DateTime" Name="CreationDate" Nullable="false" />
+          <Property Type="DateTime" Name="DueDate" Nullable="false" />
+          <NavigationProperty Name="CreatedBy" Relationship="DataBaseModel.ProcessCreator" FromRole="Process" ToRole="User" />
+          <NavigationProperty Name="AssignedTo" Relationship="DataBaseModel.ProcessUser" FromRole="Process" ToRole="User" />
+          <NavigationProperty Name="Tasks" Relationship="DataBaseModel.ProcessTasks" FromRole="Process" ToRole="Task" />
+          <NavigationProperty Name="Stream" Relationship="DataBaseModel.StreamProcesses" FromRole="Process" ToRole="Stream" />
+        </EntityType>
+        <EntityType Name="Tag">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Key" Nullable="false" />
+          <Property Type="String" Name="FriendlyName" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <NavigationProperty Name="Category" Relationship="DataBaseModel.CategoryTag" FromRole="Tag" ToRole="Category" />
+          <Property Type="Int32" Name="CategoryId" Nullable="true" />
+        </EntityType>
+        <EntityType Name="Category">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Key" Nullable="false" />
+          <Property Type="String" Name="FriendlyName" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+          <NavigationProperty Name="Tags" Relationship="DataBaseModel.CategoryTag" FromRole="Category" ToRole="Tag" />
+        </EntityType>
+        <EntityType Name="TaskStatusType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Description" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserGroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Key" Nullable="false" />
+          <Property Type="String" Name="FriendlyName" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="DataBaseModel.UserUserGroup" FromRole="UserGroup" ToRole="User" />
+        </EntityType>
+        <EntityType Name="UserDetails" BaseType="DataBaseModel.User">
+          <Property Type="String" Name="FirstName" Nullable="false" />
+          <Property Type="String" Name="LastName" Nullable="false" />
+          <Property Type="String" Name="PersonalId" Nullable="false" />
+          <Property Type="String" Name="Address" Nullable="false" />
+          <Property Type="String" Name="AddressExtra" Nullable="false" />
+          <Property Type="String" Name="PhoneNumber" Nullable="false" />
+          <Property Type="String" Name="IM" Nullable="false" />
+          <Property Type="String" Name="CellPhoneNumber" Nullable="false" />
+          <Property Type="String" Name="Website" Nullable="false" />
+        </EntityType>
+        <Association Name="CategoryTag">
+          <End Type="DataBaseModel.Category" Role="Category" Multiplicity="0..1" />
+          <End Type="DataBaseModel.Tag" Role="Tag" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Category">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Tag">
+              <PropertyRef Name="CategoryId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserUserGroup">
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="*" />
+          <End Type="DataBaseModel.UserGroup" Role="UserGroup" Multiplicity="*" />
+        </Association>
+        <Association Name="UserStream">
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="*" />
+          <End Type="DataBaseModel.Stream" Role="Stream" Multiplicity="*" />
+        </Association>
+        <Association Name="ProcessCreator">
+          <End Type="DataBaseModel.Process" Role="Process" Multiplicity="*" />
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="TaskAssignedUsers">
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="*" />
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="TaskUser">
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="*" />
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="1" />
+        </Association>
+        <Association Name="ProcessUser">
+          <End Type="DataBaseModel.Process" Role="Process" Multiplicity="*" />
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="*" />
+        </Association>
+        <Association Name="TaskTags">
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="*" />
+          <End Type="DataBaseModel.Tag" Role="Tag" Multiplicity="*" />
+        </Association>
+        <Association Name="ProcessTasks">
+          <End Type="DataBaseModel.Process" Role="Process" Multiplicity="0..1" />
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="*" />
+        </Association>
+        <Association Name="StreamTasks">
+          <End Type="DataBaseModel.Stream" Role="Stream" Multiplicity="0..1" />
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="*" />
+        </Association>
+        <Association Name="StreamProcesses">
+          <End Type="DataBaseModel.Stream" Role="Stream" Multiplicity="1" />
+          <End Type="DataBaseModel.Process" Role="Process" Multiplicity="*" />
+        </Association>
+        <Association Name="TaskStatus">
+          <End Type="DataBaseModel.Task" Role="Task" Multiplicity="1" />
+          <End Type="DataBaseModel.TaskStatusType" Role="TaskStatusType" Multiplicity="0..1" />
+        </Association>
+        <EntityType Name="Attachment">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="Type" Relationship="DataBaseModel.AttachmentAttachmentType" FromRole="Attachment" ToRole="AttachmentType" />
+          <Property Type="Boolean" Name="IsDeleted" Nullable="false" DefaultValue="True" />
+          <Property Type="String" Name="Content" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Timesheet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="StartTime" Nullable="false" />
+          <Property Type="DateTime" Name="EndTime" Nullable="false" />
+          <Property Type="Time" Name="TotalTime" Nullable="false" />
+          <NavigationProperty Name="User" Relationship="DataBaseModel.TimesheetsUser" FromRole="Timesheet" ToRole="User" />
+          <Property Type="Int32" Name="UserId" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AttachmentType">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" />
+        </EntityType>
+        <Association Name="AttachmentAttachmentType">
+          <End Type="DataBaseModel.Attachment" Role="Attachment" Multiplicity="*" />
+          <End Type="DataBaseModel.AttachmentType" Role="AttachmentType" Multiplicity="1" />
+        </Association>
+        <Association Name="TimesheetsUser">
+          <End Type="DataBaseModel.Timesheet" Role="Timesheet" Multiplicity="*" />
+          <End Type="DataBaseModel.User" Role="User" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Timesheet">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <Alias Key="Model" Value="DataBaseModel" />
+        <Alias Key="Target" Value="DataBaseModel.Store" />
+        <EntityContainerMapping CdmEntityContainer="DataBaseModelContainer" StorageEntityContainer="DataBaseModelTargetContainer">
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="DataBaseModel">
+        <edmx:EntityTypeShape EntityType="DataBaseModel.User" Width="1.5" PointX="7.5" PointY="11.75" Height="3.3263964843749996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Task" Width="1.5" PointX="5.25" PointY="12" Height="2.7494921874999996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Stream" Width="1.5" PointX="0.75" PointY="12.25" Height="2.1725878906249996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Process" Width="1.5" PointX="3" PointY="12.125" Height="2.5571907552083353" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Tag" Width="1.5" PointX="10.5" PointY="9.25" Height="2.1725878906249996" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Category" Width="1.5" PointX="8.25" PointY="8.375" Height="1.9802864583333317" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.TaskStatusType" Width="1.5" PointX="7.5" PointY="16.625" Height="1.4033821614583317" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.UserGroup" Width="1.5" PointX="9.75" PointY="12.5" Height="1.7879850260416674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.UserDetails" Width="1.5" PointX="4.5" PointY="15.875" Height="2.7494921874999978" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Attachment" Width="1.5" PointX="7.125" PointY="0.875" Height="1.7879850260416674" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.Timesheet" Width="1.5" PointX="7.5" PointY="19.125" Height="2.1725878906250031" IsExpanded="true" />
+        <edmx:EntityTypeShape EntityType="DataBaseModel.AttachmentType" Width="1.5" PointX="9.375" PointY="1" Height="1.5956835937500031" IsExpanded="true" />
+        <edmx:InheritanceConnector EntityType="DataBaseModel.UserDetails" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="8.25" PointY="15.076396484375" />
+          <edmx:ConnectorPoint PointX="8.25" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="7.395833333333333" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="7.229166666666667" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="7.208333333333333" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="7.041666666666667" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="15.5" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="15.875" />
+        </edmx:InheritanceConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.CategoryTag" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="9.75" PointY="9.8026432291666659" />
+          <edmx:ConnectorPoint PointX="10.5" PointY="9.8026432291666659" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.UserUserGroup" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="9" PointY="13.393992513020834" />
+          <edmx:ConnectorPoint PointX="9.75" PointY="13.393992513020834" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.UserStream" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="7.5" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="7.028035481770833" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="6.861368815104167" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="5.1397840310496781" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="4.973117364383012" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="3.8333333333333335" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="3.6666666666666665" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="2.7083333333333335" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="2.5416666666666665" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="1.5" PointY="14.9441943359375" />
+          <edmx:ConnectorPoint PointX="1.5" PointY="14.422587890625" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.ProcessCreator" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="3.75" PointY="14.682190755208335" />
+          <edmx:ConnectorPoint PointX="3.75" PointY="15.04154791015625" />
+          <edmx:ConnectorPoint PointX="4.8757637901642612" PointY="15.04154791015625" />
+          <edmx:ConnectorPoint PointX="5.0424304568309273" PointY="15.04154791015625" />
+          <edmx:ConnectorPoint PointX="6.9587223893229178" PointY="15.04154791015625" />
+          <edmx:ConnectorPoint PointX="7.1253890559895838" PointY="15.04154791015625" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="15.04154791015625" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.TaskAssignedUsers" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6.75" PointY="13.37474609375" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="13.37474609375" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.TaskUser" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6.75" PointY="12.624873046874999" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="12.624873046874999" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.ProcessUser" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.1562525" PointY="14.682190755208335" />
+          <edmx:ConnectorPoint PointX="4.1562525" PointY="14.961618623046874" />
+          <edmx:ConnectorPoint PointX="4.9556930772736374" PointY="14.961618623046874" />
+          <edmx:ConnectorPoint PointX="5.1223597439403035" PointY="14.961618623046874" />
+          <edmx:ConnectorPoint PointX="6.8787931022135416" PointY="14.961618623046874" />
+          <edmx:ConnectorPoint PointX="7.0454597688802076" PointY="14.961618623046874" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="14.961618623046874" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.TaskTags" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6" PointY="12" />
+          <edmx:ConnectorPoint PointX="6" PointY="10.920187174479166" />
+          <edmx:ConnectorPoint PointX="10.5" PointY="10.920187174479166" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.ProcessTasks" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="4.5" PointY="13.403595377604168" />
+          <edmx:ConnectorPoint PointX="5.25" PointY="13.403595377604168" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.StreamTasks" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.2499999999999996" PointY="14.422587890625" />
+          <edmx:ConnectorPoint PointX="2.625" PointY="14.797587890625" />
+          <edmx:ConnectorPoint PointX="2.625" PointY="15.1244921875" />
+          <edmx:ConnectorPoint PointX="4.8761528461538468" PointY="15.1244921875" />
+          <edmx:ConnectorPoint PointX="5.2511528461538459" PointY="14.7494921875" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.StreamProcesses" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="2.25" PointY="13.305041445312499" />
+          <edmx:ConnectorPoint PointX="3" PointY="13.305041445312499" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.TaskStatus" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="6.75" PointY="14.7494921875" />
+          <edmx:ConnectorPoint PointX="7.125" PointY="15.1244921875" />
+          <edmx:ConnectorPoint PointX="7.125" PointY="17.326691080729166" />
+          <edmx:ConnectorPoint PointX="7.229166666666667" PointY="17.326691080729166" />
+          <edmx:ConnectorPoint PointX="7.395833333333333" PointY="17.326691080729166" />
+          <edmx:ConnectorPoint PointX="7.5" PointY="17.326691080729166" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.AttachmentAttachmentType" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="8.625" PointY="1.7978417968750016" />
+          <edmx:ConnectorPoint PointX="9.375" PointY="1.7978417968750016" />
+        </edmx:AssociationConnector>
+        <edmx:AssociationConnector Association="DataBaseModel.TimesheetsUser" ManuallyRouted="false">
+          <edmx:ConnectorPoint PointX="7.5634605384615385" PointY="19.125" />
+          <edmx:ConnectorPoint PointX="7.3125" PointY="18.874039461538462" />
+          <edmx:ConnectorPoint PointX="7.3125" PointY="15.265049330528846" />
+          <edmx:ConnectorPoint PointX="7.5011528461538459" PointY="15.076396484375" />
+        </edmx:AssociationConnector>
+      </edmx:Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

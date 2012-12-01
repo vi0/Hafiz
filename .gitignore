@@ -1,0 +1,8 @@
+/Hafiz.Data/bin
+/Hafiz.Data/obj
+*.user
+/Hafiz.Services/bin
+/Hafiz.Services/obj
+/Hafiz.UI.Client/bin
+/Hafiz.UI.Client/obj
+*.suo

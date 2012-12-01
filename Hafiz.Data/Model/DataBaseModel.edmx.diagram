@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="097525ab87f249d9b27454d9e0a5993c" Name="Diagram1" ZoomLevel="86" >
+        <EntityTypeShape EntityType="DataBaseModel.User" Width="1.5" PointX="8.625" PointY="2.375" />
+        <EntityTypeShape EntityType="DataBaseModel.Task" Width="1.5" PointX="1.375" PointY="1.125" />
+        <EntityTypeShape EntityType="DataBaseModel.Stream" Width="1.5" PointX="6.375" PointY="1.125" />
+        <EntityTypeShape EntityType="DataBaseModel.Process" Width="1.5" PointX="4.25" PointY="1.125" />
+        <EntityTypeShape EntityType="DataBaseModel.Tag" Width="1.5" PointX="1.375" PointY="4.75" />
+        <EntityTypeShape EntityType="DataBaseModel.Category" Width="1.5" PointX="1.375" PointY="7.625" />
+        <EntityTypeShape EntityType="DataBaseModel.TaskStatusType" Width="1.5" PointX="6.625" PointY="6.25" />
+        <EntityTypeShape EntityType="DataBaseModel.UserGroup" Width="1.5" PointX="10.625" PointY="1.75" />
+        <EntityTypeShape EntityType="DataBaseModel.UserDetails" Width="1.5" PointX="8.625" PointY="5.875" />
+        <InheritanceConnector EntityType="DataBaseModel.UserDetails" />
+        <AssociationConnector Association="DataBaseModel.CategoryTag" />
+        <AssociationConnector Association="DataBaseModel.UserUserGroup" />
+        <AssociationConnector Association="DataBaseModel.UserStream" />
+        <AssociationConnector Association="DataBaseModel.ProcessCreator" />
+        <AssociationConnector Association="DataBaseModel.TaskAssignedUsers" />
+        <AssociationConnector Association="DataBaseModel.TaskUser" />
+        <AssociationConnector Association="DataBaseModel.ProcessUser" />
+        <AssociationConnector Association="DataBaseModel.TaskTags" />
+        <AssociationConnector Association="DataBaseModel.ProcessTasks" />
+        <AssociationConnector Association="DataBaseModel.StreamTasks" />
+        <AssociationConnector Association="DataBaseModel.StreamProcesses" />
+        <AssociationConnector Association="DataBaseModel.TaskStatus" />
+        <EntityTypeShape EntityType="DataBaseModel.Attachment" Width="1.5" PointX="13" PointY="1.75" />
+        <EntityTypeShape EntityType="DataBaseModel.Timesheet" Width="1.5" PointX="13" PointY="3.875" />
+        <EntityTypeShape EntityType="DataBaseModel.AttachmentType" Width="1.5" PointX="15.25" PointY="1.75" />
+        <AssociationConnector Association="DataBaseModel.AttachmentAttachmentType" />
+        <AssociationConnector Association="DataBaseModel.TimesheetsUser" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
